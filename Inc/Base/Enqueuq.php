@@ -4,8 +4,9 @@
  */
 namespace Inc\Base;
 
+use \Inc\Base\BaseController;
 
-class Enqueuq
+class Enqueuq extends BaseController
 {
     public function register() {
         // for administracion script
@@ -15,8 +16,8 @@ class Enqueuq
     public function enqueue() {
         // enqueue all our scrits
         //$MarketingMinerStyle = plugins_url('/assets/marketing-miner.css', __FILE__ .'/../' );
-        wp_enqueue_style("mypluginstyle", PLUGIN_URL . 'assets/marketing-miner.css' );
+        wp_enqueue_style("mypluginstyle", $this->plugin_url . 'assets/marketing-miner.css' );
         //$MarketingMinerScript = plugins_url('/assets/marketing-miner.js', __FILE__ .'/../' );
-        wp_enqueue_script("mypluginscript", PLUGIN_URL . 'assets/marketing-miner.js');
+        wp_enqueue_script("mypluginscript", $this->plugin_url . 'assets/marketing-miner.js');
     }
 }

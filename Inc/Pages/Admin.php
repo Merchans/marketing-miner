@@ -4,19 +4,13 @@
  */
 namespace Inc\Pages;
 
+use \Inc\Base\BaseController;
 
-class Admin
+class Admin extends BaseController
 {
     public $plugin;
 
     // methods
-    public function __construct( $apiKey = null ) {
-
-        $this->apiKey = $apiKey;
-        $this->plugin = plugin_basename( __FILE__ );
-
-    }
-
     public function register() {
 
         add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
@@ -38,7 +32,6 @@ class Admin
 
     public function admin_keywords_content()
     {
-        $key =  $this->apiKey;
         ?>
         <div class="wrap">
             <h1 class="wp-heading-inline"><?php _e('Klíčová slova', 'marketing-miner' ); ?></h1>
