@@ -3,9 +3,11 @@
  * @package MarketingMiner
  */
 
-class MarketingMinerActivate
+namespace Inc\Base;
+
+class Deactivate
 {
-    public static function activate() {
+    public static function deactivate() {
         flush_rewrite_rules();
     }
 }
