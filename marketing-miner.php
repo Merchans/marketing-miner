@@ -26,55 +26,50 @@ if ( !class_exists( 'MarketingMiner' ) ) {
         protected $apiKey;
         public $plugin;
 
-        // method
-        function __construct( $apiKey = null ) {
+        // methods
+        public function __construct( $apiKey = null ) {
 
             $this->apiKey = $apiKey;
             $this->plugin = plugin_basename( __FILE__ );
         }
 
-        function register() {
+    	public function register() {
 
-            add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
+        	add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
+
+        	// for administracion script
+            add_action( 'admin_enqueue_scripts', array( $this, 'enqueue' ) );
+
+            // for thems scripts
 
             add_filter("plugin_action_links_$this->plugin", array($this, "settings_link"));
         }
 
+
         public function settings_link( $link ) {
 
-			// add custom settings link
-			$settings_link = '<a href="admin.php?page=marketing-miner">Settings</a>';
-			array_push($link, $settings_link);
+            // add custom settings link
+            $settings_link = '<a href="admin.php?page=marketing-miner">Settings</a>';
+            array_push($link, $settings_link);
 
-			return $link;
+            return $link;
 
-		}
-
-
-
-        function activate() {
-            flush_rewrite_rules();
         }
 
-        function deactivation() {
-            flush_rewrite_rules();
-        }
-
-
-        function add_admin_page()
+    	public function add_admin_page()
         {
             add_menu_page(
                 __('Keywords', 'marketing-miner'),
                 'Keywords',
                 'read',
                 'marketing-miner',
-                array( $this,'adminKeywordsContent' ),
+                array( $this,'admin_keywords_content' ),
                 'dashicons-chart-line',
                 5
             );
         }
 
-        function adminKeywordsContent()
+    	public function admin_keywords_content()
         {
         	$key =  $this->apiKey;
             ?>
@@ -155,6 +150,11 @@ if ( !class_exists( 'MarketingMiner' ) ) {
             <?php
         }
 
+    	public function enqueue() {
+        	// enqueue all our scrits
+            wp_enqueue_style("mypluginstyle", plugins_url('/assets/marketing-miner.css', __FILE__));
+            wp_enqueue_script("mypluginstyle", plugins_url('/assets/marketing-miner.js', __FILE__));
+		}
     }
 }
 
@@ -164,10 +164,12 @@ if ( class_exists('MarketingMiner') ) {
     $marketingMiner->register();
 
     // activation
-    register_activation_hook( __FILE__, array($marketingMiner, 'activate') );
+	require_once plugin_dir_path(__FILE__) . 'inc/marketing-miner-activate.php';
+    register_activation_hook( __FILE__, array('MarketingMinerActivate', 'activate') );
 
 	// deactivation
-    register_deactivation_hook( __FILE__, array($marketingMiner, 'deactivate') );
+    require_once plugin_dir_path(__FILE__) . 'inc/marketing-miner-deactivate.php';
+    register_deactivation_hook( __FILE__, array('MarketingMinerDeactivate', 'deactivate') );
 
 }
 
