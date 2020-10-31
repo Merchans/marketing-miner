@@ -1,0 +1,14 @@
+{
+    "name": "dolac/marketing-miner",
+    "description": "Data mining plugin for online marketers! Save your time with various tools that drives you valuable data.",
+    "type": "project",
+    "license": "GPL",
+    "authors": [
+        {
+            "name": "Merchnas",
+            "email": "addmarkovic@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
