@@ -5,7 +5,7 @@
 
 /*
 Plugin Name: Marketing Miner
-Plugin URI: http://URI_Of_Page_Describing_Plugin_and_Updates
+Plugin URI: https://github.com/Merchans/marketing-miner
 Description: Data mining plugin for online marketers! Save your time with various tools that drives you valuable data.
 Version: 1.0
 Author: Richard Markovič & Jakub Inger
@@ -31,13 +31,24 @@ if ( !class_exists( 'MarketingMiner' ) ) {
 
             $this->apiKey = $apiKey;
             $this->plugin = plugin_basename( __FILE__ );
-
         }
 
         function register() {
 
-            add_action( 'admin_menu', array( $this, 'addAdminKeywords' ) );
+            add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
+
+            add_filter("plugin_action_links_$this->plugin", array($this, "settings_link"));
         }
+
+        public function settings_link( $link ) {
+
+			// add custom settings link
+			$settings_link = '<a href="admin.php?page=marketing-miner">Settings</a>';
+			array_push($link, $settings_link);
+
+			return $link;
+
+		}
 
 
 
@@ -50,13 +61,13 @@ if ( !class_exists( 'MarketingMiner' ) ) {
         }
 
 
-        function addAdminKeywords()
+        function add_admin_page()
         {
             add_menu_page(
                 __('Keywords', 'marketing-miner'),
                 'Keywords',
                 'read',
-                'keywords',
+                'marketing-miner',
                 array( $this,'adminKeywordsContent' ),
                 'dashicons-chart-line',
                 5
@@ -68,7 +79,7 @@ if ( !class_exists( 'MarketingMiner' ) ) {
         	$key =  $this->apiKey;
             ?>
             <div class="wrap">
-                <h1 class="wp-heading-inline"><?php _e('Klíčová slova'); ?></h1>
+                <h1 class="wp-heading-inline"><?php _e('Klíčová slova', 'marketing-miner' ); ?></h1>
                 <?php
 
                 include 'templates/keywords-decreasing-header.html';
@@ -151,13 +162,13 @@ if ( class_exists('MarketingMiner') ) {
 
     $marketingMiner = new MarketingMiner("ebd35110-cf35-4c86-900a-83056e5f7cf5");
     $marketingMiner->register();
+
+    // activation
+    register_activation_hook( __FILE__, array($marketingMiner, 'activate') );
+
+	// deactivation
+    register_deactivation_hook( __FILE__, array($marketingMiner, 'deactivate') );
+
 }
 
 
-// activation
-register_activation_hook( __FILE__, array($marketingMiner, 'activate') );
-
-// deactivation
-register_deactivation_hook( __FILE__, array($marketingMiner, 'deactivate') );
-
-// uninstal
