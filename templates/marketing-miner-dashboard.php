@@ -3,8 +3,6 @@
     <?php
      $api_key = esc_attr( get_option( 'mm_api_key' ) );
 if ($api_key){
-
-    try { include dirname(__FILE__, 2) .'/templates/keywords-decreasing-header.html';
         //ebd35110-cf35-4c86-900a-83056e5f7cf5
 
         $cURLConnection = curl_init();
@@ -14,7 +12,12 @@ if ($api_key){
         $keywordsList = curl_exec($cURLConnection);
         curl_close($cURLConnection);
 
-        $keywordsIncreasing = json_decode($keywordsList, true)['increasing'];
+        if (!empty(json_decode($keywordsList, true)['increasing']))
+		{
+    		include dirname(__FILE__, 2) .'/templates/keywords-decreasing-header.html';
+
+            $keywordsIncreasing = json_decode($keywordsList, true)['increasing'];
+
 
 
     foreach($keywordsIncreasing as $keyword):
@@ -80,9 +83,10 @@ if ($api_key){
 </div>
 <?php
 }
-catch (Exception $e)
+else
 {
-    echo 'Caught exception: ',  $e->getMessage(), "\n";
+	$admin_url = get_admin_url();
+    echo "<a href=\"$admin_url/admin.php?page=marketing-miner-settings\"><strong>Wrong API</strong></a>";
 }
 
 }
