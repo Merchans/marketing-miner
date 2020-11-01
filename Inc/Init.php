@@ -1,6 +1,7 @@
 <?php
-
-
+/**
+ * @package MarketingMiner
+ */
 namespace Inc;
 
 

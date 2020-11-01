@@ -5,112 +5,113 @@
 namespace Inc\Pages;
 
 use \Inc\Base\BaseController;
-
+use \Inc\Api\SettingsApi;
+use Inc\Api\Callbacks\AdminCallbacks;
 class Admin extends BaseController
 {
-    public $plugin;
 
-    // methods
-    public function register() {
+    public $settings;
 
-        add_action( 'admin_menu', array( $this, 'add_admin_page' ) );
+    public $callbacks;
 
+    public $pages = array();
+
+    public $subpages = array();
+
+    public function register()
+    {
+        $this->settings = new SettingsApi();
+
+        $this->callbacks = new AdminCallbacks();
+
+        $this->setPages();
+
+        $this->setSubpages();
+
+        $this->setSettings();
+        $this->setSections();
+        $this->setFields();
+
+        $this->settings->addPages( $this->pages )->withSubPage( 'Dashboard' )->addSubPages( $this->subpages )->register();
     }
 
-    public function add_admin_page()
+
+    public function setPages()
+	{
+        $this->pages = [
+            [
+                'page_title'	=>  'Keywords',
+                'menu_title'	=>	'Keywords',
+                'capability'	=>	'read',
+                'menu_slug'		=>	'marketing-miner',
+                'callback'		=> 	array( $this->callbacks, 'adminDashboard' ),
+                'icon_url'		=>  'dashicons-chart-line',
+                'position'		=>  110
+            ],
+        ];
+	}
+
+    public function setSubpages()
     {
-        add_menu_page(
-            __('Keywords', 'marketing-miner'),
-            'Keywords',
-            'read',
-            'marketing-miner',
-            array( $this,'admin_keywords_content' ),
-            'dashicons-chart-line',
-            5
+        $this->subpages = [
+            [
+                'parent_slug'	=>	'marketing-miner',
+                'page_title'	=>	'Marketing Miner Settings',
+                'menu_title'	=>	'Settings',
+                'capability'	=>	'manage_options',
+                'menu_slug'		=>	'marketing-miner-settings',
+                'callback'		=>  array( $this->callbacks, 'adminSettings' ),
+            ],
+        ];
+    }
+
+    public function setSettings()
+    {
+        $args = array(
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name' => 'mm_api_key',
+                'callback' => array( $this->callbacks, 'alecadddOptionsGroup' )
+            ),
+            array(
+                'option_group' => 'alecaddd_options_group',
+                'option_name' => 'first_name'
+            )
         );
+
+        $this->settings->setSettings( $args );
     }
 
-    public function admin_keywords_content()
+    public function setSections()
     {
-        ?>
-        <div class="wrap">
-            <h1 class="wp-heading-inline"><?php _e('Klíčová slova', 'marketing-miner' ); ?></h1>
-            <?php
+        $args = array(
+            array(
+                'id' => 'alecaddd_admin_index',
+                'title' => 'Settings',
+                'callback' => array( $this->callbacks, 'alecadddAdminSection' ),
+                'page' => 'alecaddd_plugin'
+            )
+        );
 
-            include dirname(__FILE__, 3) .'/templates/keywords-decreasing-header.html';
-
-            $cURLConnection = curl_init();
-
-            curl_setopt($cURLConnection, CURLOPT_URL, "https://www.marketingminer.com/api/v1/project/ebd35110-cf35-4c86-900a-83056e5f7cf5/detail/dashboard");
-            curl_setopt($cURLConnection, CURLOPT_RETURNTRANSFER, true);
-
-            $keywordsList = curl_exec($cURLConnection);
-            curl_close($cURLConnection);
-
-            $keywordsIncreasing = json_decode($keywordsList, true)['increasing'];
-
-            foreach($keywordsIncreasing as $keyword):
-                ?>
-                <tr>
-                    <td class="text-capitalize "><?= $keyword['engine']; ?></td>
-                    <td><?= $keyword['keyword']; ?></td>
-                    <td>
-                        <?php if($keyword['position'] <= 10): ?>
-                            <button class="btn btn-info btn-position text-center">
-                                <?php if($keyword['position']==1) ?>
-                                    🏆
-                                <?= $keyword['position']; ?>
-                            </button>
-                        <?php else: ?>
-                            <button class="btn btn-secondary btn-position text-center">
-                                <?= $keyword['position']; ?>
-                            </button>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <button class="btn btn-success btn-position text-center">
-                            +<?= $keyword['position_change']; ?>
-                        </button>
-                    </td>
-                </tr>
-            <?php
-            endforeach;
-
-            include dirname(__FILE__, 3) .'/templates/keywords-increasing-footer.html';
-            include dirname(__FILE__, 3) .'/templates/keywords-decreasing-header.html';
-            echo '<br><br>';
-
-            $keywordsDecreasing = json_decode($keywordsList, true)['decreasing'];
-            foreach($keywordsDecreasing as $keyword): ?>
-                <tr>
-                    <td class="text-capitalize"><?= $keyword['engine']; ?></td>
-                    <td><?= $keyword['keyword']; ?></td>
-                    <td>
-                        <?php if($keyword['position'] <= 10): ?>
-                            <button class="btn btn-info btn-position text-center">
-                                <?= $keyword['position']; ?>
-                            </button>
-                        <?php else: ?>
-                            <button class="btn btn-secondary btn-position text-center">
-                                <?php if($keyword['position']>50): ?>
-                                    😥
-                                <?php endif; ?>
-                                <?= $keyword['position']; ?>
-                            </button>
-                        <?php endif; ?>
-                    </td>
-                    <td>
-                        <button class="btn btn-danger btn-position text-center">
-                            <?= $keyword['position_change']; ?>
-                        </button>
-                    </td>
-                </tr>
-            <?php
-            endforeach;
-
-            include dirname(__FILE__, 3) .'/templates/keywords-decreasing-footer.html'; ?>
-        </div>
-        <?php
+        $this->settings->setSections( $args );
     }
 
+    public function setFields()
+    {
+        $args = array(
+            array(
+                'id' => 'mm_api_key',
+                'title' => 'API KEY',
+                'callback' => array( $this->callbacks, 'mmApiKey' ),
+                'page' => 'alecaddd_plugin',
+                'section' => 'alecaddd_admin_index',
+                'args' => array(
+                    'label_for' => 'mm_api_key',
+                    'class' => 'example-class'
+                )
+            )
+        );
+
+        $this->settings->setFields( $args );
+    }
 }
