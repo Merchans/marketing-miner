@@ -22,7 +22,6 @@ if ( file_exists( dirname( __FILE__ ) . '/vendor/autoload.php' ) ) {
     require_once dirname( __FILE__ ) . '/vendor/autoload.php';
 }
 
-
 // Nemespace for auto loading
 use Inc\Base\Activate;
 use Inc\Base\Deactivate;
