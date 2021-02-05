@@ -3,7 +3,7 @@
 /**
  * Trigger this file on Plugin uninstall
  *
- * @package MarketingMiner
+ * @package NBSPAutomat
  */
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) {

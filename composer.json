@@ -1,6 +1,6 @@
 {
-    "name": "dolac/marketing-miner",
-    "description": "Data mining plugin for online marketers! Save your time with various tools that drives you valuable data.",
+    "name": "dolac/nbsp-automat",
+    "description": "Automatically adds a non-breaking space (&nbsp) in the content.",
     "type": "project",
     "license": "GPL",
     "authors": [

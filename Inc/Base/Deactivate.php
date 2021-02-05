@@ -1,6 +1,6 @@
 <?php
 /**
- * @package MarketingMiner
+ * @package NBSPAutomat
  */
 
 namespace Inc\Base;

@@ -14,7 +14,7 @@ class SettingsLinks extends BaseController
     public function settings_link( $link ) {
 
         // add custom settings link
-        $settings_link = '<a href="admin.php?page=marketing-miner">Settings</a>';
+        $settings_link = '<a href="admin.php?page=nbsp-automat">Settings</a>';
         array_push($link, $settings_link);
 
         return $link;

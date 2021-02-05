@@ -1,38 +1,33 @@
 <?php
-/**
- * @package  MarketingMiner
- */
-namespace Inc\Api\Callbacks;
+	/**
+	 * @package  NBSPAutomat
+	 */
 
-use Inc\Base\BaseController;
+	namespace Inc\Api\Callbacks;
 
-class AdminCallbacks extends BaseController
-{
-    public function adminDashboard()
-    {
-        return require_once( "$this->plugin_path/templates/marketing-miner-dashboard.php" );
-    }
+	use Inc\Base\BaseController;
 
-    public function adminSettings()
-    {
-        return require_once( "$this->plugin_path/templates/marketing-miner-settings.php" );
-    }
+	class AdminCallbacks extends BaseController {
+		public function adminDashboard() {
+			return require_once( "$this->plugin_path/templates/nbsp-automat-dashboard.php" );
+		}
 
-    public function mmApiKey()
-    {
-        $value = esc_attr( get_option( 'mm_api_key' ) );
-        echo '<input type="text" class="regular-text" name="mm_api_key" value="' . $value . '" placeholder="Enter your API KEY here">';
-    }
+		public function adminSettings() {
+			return require_once( "$this->plugin_path/templates/nbsp-automat-settings.php" );
+		}
 
-    public function alecadddOptionsGroup( $input )
-    {
-        return $input;
-    }
+		public function mmApiKey() {
+			$value = esc_attr( get_option( 'mm_api_key' ) );
+			echo '<input type="text" class="regular-text" name="mm_api_key" value="' . $value . '" placeholder="Enter your API KEY here">';
+		}
 
-    public function alecadddAdminSection()
-    {
-        echo 'We use Custom Search API partly in some queries of specific miners. They can help us.';
-    }
+		public function alecadddOptionsGroup( $input ) {
+			return $input;
+		}
+
+		public function alecadddAdminSection() {
+			echo 'We use Custom Search API partly in some queries of specific miners. They can help us.';
+		}
 
 
-}
+	}

@@ -1,6 +1,6 @@
 <?php
 /**
- * @package MarketingMiner
+ * @package NBSPAutomat
  */
 namespace Inc\Pages;
 
@@ -36,14 +36,17 @@ class Admin extends BaseController
     }
 
 
-    public function setPages()
+	/**
+	 *
+	 */
+	public function setPages()
 	{
         $this->pages = [
             [
                 'page_title'	=>  'Keywords',
                 'menu_title'	=>	'Keywords',
                 'capability'	=>	'read',
-                'menu_slug'		=>	'marketing-miner',
+                'menu_slug'		=>	'nbsp-automat',
                 'callback'		=> 	array( $this->callbacks, 'adminDashboard' ),
                 'icon_url'		=>  'dashicons-chart-line',
                 'position'		=>  110
@@ -51,21 +54,27 @@ class Admin extends BaseController
         ];
 	}
 
-    public function setSubpages()
+	/**
+	 *
+	 */
+	public function setSubpages()
     {
         $this->subpages = [
             [
-                'parent_slug'	=>	'marketing-miner',
-                'page_title'	=>	'Marketing Miner Settings',
+                'parent_slug'	=>	'nbsp-automat',
+                'page_title'	=>	'NBSP Automat Settings',
                 'menu_title'	=>	'Settings',
                 'capability'	=>	'manage_options',
-                'menu_slug'		=>	'marketing-miner-settings',
+                'menu_slug'		=>	'nbsp-automat-settings',
                 'callback'		=>  array( $this->callbacks, 'adminSettings' ),
             ],
         ];
     }
 
-    public function setSettings()
+	/**
+	 *
+	 */
+	public function setSettings()
     {
         $args = array(
             array(
@@ -82,7 +91,10 @@ class Admin extends BaseController
         $this->settings->setSettings( $args );
     }
 
-    public function setSections()
+	/**
+	 *
+	 */
+	public function setSections()
     {
         $args = array(
             array(
@@ -96,7 +108,10 @@ class Admin extends BaseController
         $this->settings->setSections( $args );
     }
 
-    public function setFields()
+	/**
+	 *
+	 */
+	public function setFields()
     {
         $args = array(
             array(

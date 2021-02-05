@@ -1,6 +1,6 @@
 <?php
 /**
- * @package MarketingMiner
+ * @package NBSPAutomat
  */
 namespace Inc\Base;
 
@@ -15,9 +15,9 @@ class Enqueuq extends BaseController
 
     public function enqueue() {
         // enqueue all our scrits
-        //$MarketingMinerStyle = plugins_url('/assets/marketing-miner.css', __FILE__ .'/../' );
-        wp_enqueue_style("mypluginstyle", $this->plugin_url . 'assets/marketing-miner.css' );
-        //$MarketingMinerScript = plugins_url('/assets/marketing-miner.js', __FILE__ .'/../' );
-        wp_enqueue_script("mypluginscript", $this->plugin_url . 'assets/marketing-miner.js');
+        //$NBSPAutomatStyle = plugins_url('/assets/nbsp-automat.css', __FILE__ .'/../' );
+        wp_enqueue_style("mypluginstyle", $this->plugin_url . 'assets/nbsp-automat.css' );
+        //$NBSPAutomatScript = plugins_url('/assets/nbsp-automat.js', __FILE__ .'/../' );
+        wp_enqueue_script("mypluginscript", $this->plugin_url . 'assets/nbsp-automat.js');
     }
 }
